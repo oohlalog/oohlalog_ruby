@@ -14,7 +14,14 @@ class Oohlalog::Logger
   include Severity
 
   def initialize(buffer_size=100, level = DEBUG, options={})
-    @api_key = options["api_key"] || options[:api_key] || Oohlalog.api_key
+    @api_key = Oohlalog.api_key
+    if options.has_key? :api_key
+      @api_key = options[:api_key]
+    elsif options.has_key? "api_key"
+      @api_key = options["api_key"]
+    end
+
+
     @buffer_size = buffer_size
     @buffer = []
     self.level = level
@@ -67,7 +74,7 @@ class Oohlalog::Logger
 private
   def send_payload(payload)
     begin
-      request = Net::HTTP::Post.new("#{Oohlalog.path}?apiKey=#{@api_key}",{'Content-Type' =>'application/json'})
+      request = Net::HTTP::Post.new("#{Oohlalog.path}?apiKey=#{@api_key || Oohlalog.api_key}",{'Content-Type' =>'application/json'})
       request.body = payload.to_json
       http_net = Net::HTTP.new(Oohlalog.host, Oohlalog.port)
       http_net.read_timeout = 5

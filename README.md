@@ -26,6 +26,12 @@ This gem automatically ties into the rails standard BufferedLogger. Set your con
   Oohlalog.api_key = "YOUR API KEY HERE"
 ```
 
+**NOTE:** If you wish to not inject the oohlalog logger into the standard rails logger, you may do so by adding the following to your `application.rb` file.
+
+```ruby
+  Oohlalog.inject_rails = false
+```
+
 ### Standard Ruby
 
 Oohlalog is designed as an independent logging class. You can use it this way or tie it into the main ruby logger.

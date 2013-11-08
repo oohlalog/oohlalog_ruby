@@ -5,7 +5,7 @@ require 'oohlalog/counter'
 require 'oohlalog/railtie'
 
 module Oohlalog
-  @host = "oohlalog.com"
+  @host = "api.oohlalog.com"
   @port = 80
   @path = "/api/logging/save.json"
   @api_key = nil

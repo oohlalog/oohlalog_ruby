@@ -32,6 +32,7 @@ class Oohlalog::Logger
     if severity >= self.level
       @buffer << {level: severity_string(severity), message: message.gsub(/\e\[(\d+)m/, '') , category: category, details: details, timestamp:Time.now.to_i * 1000, hostName: Socket.gethostname}
       check_buffer_size
+      return
     end
   end
 

@@ -42,7 +42,7 @@ To run an independent instance simply create a new log object
   require 'oohlalog'
   Oohlalog.api_key = "YOUR API KEY HERE"
 
-  logger = Oohlalog::Logger.new(100, Oohlalog::Logger.DEBUG) #First argument is the buffer size, second is log level
+  logger = Oohlalog::Logger.new(100, Oohlalog::Logger::DEBUG) #First argument is the buffer size, second is log level
 
   logger.warn("Warning Log")
   logger.info("Info log")

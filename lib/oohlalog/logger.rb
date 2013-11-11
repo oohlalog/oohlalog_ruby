@@ -28,9 +28,12 @@ class Oohlalog::Logger
   end
 
   def add(severity, message, category=nil, details=nil)
-    return if message.nil? || message.empty?
+    return if message.nil? || message.to_s.empty?
     if severity >= self.level
-      @buffer << {level: severity_string(severity), message: message.gsub(/\e\[(\d+)m/, '') , category: category, details: details, timestamp:Time.now.to_i * 1000, hostName: Socket.gethostname}
+      if details.nil? && defined?(message.backtrace)
+        details = message.backtrace.join("\n")
+      end
+      @buffer << {level: severity_string(severity), message: message.to_s.gsub(/\e\[(\d+)m/, '') , category: category, details: details, timestamp:Time.now.to_i * 1000, hostName: Socket.gethostname}
       check_buffer_size
       return
     end

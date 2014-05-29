@@ -8,7 +8,7 @@ module Oohlalog
 
       private
 
-      def add_with_oohlalog(severity, message, prog_name, &block)
+      def add_with_oohlalog(severity, message, prog_name=nil, &block)
         if severity >= self.level
           @@oohla_logger.add(severity, message, prog_name)
         end

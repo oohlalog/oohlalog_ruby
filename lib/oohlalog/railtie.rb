@@ -3,7 +3,7 @@ module Oohlalog
     require 'oohlalog/buffered_logger'
     class Railtie < Rails::Railtie
       initializer "oohlalog" do |app|
-        if Oohlalog.inject_rails
+        if Oohlalog.inject_rails && Oohlalog.api_key
           ActiveSupport::BufferedLogger.instance_eval do
             include BufferedLogger
           end
@@ -15,7 +15,7 @@ module Oohlalog
     require 'oohlalog/buffered_logger'
     class Railtie < Rails::Railtie
       initializer "oohlalog" do |app|
-        if Oohlalog.inject_rails
+        if Oohlalog.inject_rails && Oohlalog.api_key
           ::Logger.instance_eval do
             include BufferedLogger
           end

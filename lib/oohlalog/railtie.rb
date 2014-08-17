@@ -4,6 +4,9 @@ module Oohlalog
     class Railtie < Rails::Railtie
       initializer "oohlalog" do |app|
         if Oohlalog.inject_rails && Oohlalog.api_key
+            if Oohlalog.agent == 'ruby'
+                Oohlalog.agent = 'rails'
+            end
           ActiveSupport::BufferedLogger.instance_eval do
             include BufferedLogger
           end
@@ -16,6 +19,9 @@ module Oohlalog
     class Railtie < Rails::Railtie
       initializer "oohlalog" do |app|
         if Oohlalog.inject_rails && Oohlalog.api_key
+            if Oohlalog.agent == 'ruby'
+                Oohlalog.agent = 'rails'
+            end
           ::Logger.instance_eval do
             include BufferedLogger
           end

@@ -21,7 +21,14 @@ class Oohlalog::Logger
       @api_key = options["api_key"]
     end
 
+    @agent = Oohlalog.agent
+    if options.has_key? :agent
+        @agent = options[:agent]
+    elsif options.has_key? "agent"
+        @agent = options["agent"]
+    end
 
+    @secure = Oohlalog.secure
     @buffer_size = buffer_size
     @buffer = []
     self.level = level
@@ -40,7 +47,7 @@ class Oohlalog::Logger
             if details.nil? && defined?(log_message.backtrace)
                 details = log_message.backtrace.join("\n")
             end
-            @buffer << {level: severity_string(severity), message: log_message.to_s.gsub(/\e\[(\d+)m/, '') , category: category, details: details, timestamp:Time.now.to_i * 1000, hostName: Socket.gethostname}
+            @buffer << {level: severity_string(severity), message: log_message.to_s.gsub(/\e\[(\d+)m/, ''), agent: @agent , category: category, details: details, timestamp:Time.now.to_i * 1000, hostName: Socket.gethostname}
             check_buffer_size
             return
         end
@@ -88,6 +95,10 @@ private
       request = Net::HTTP::Post.new("#{Oohlalog.path}?apiKey=#{@api_key || Oohlalog.api_key}",{'Content-Type' =>'application/json'})
       request.body = payload.to_json
       http_net = Net::HTTP.new(Oohlalog.host, Oohlalog.port)
+      if @secure
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE # read into this
+      end
       http_net.read_timeout = 5
       http_net.start {|http| http.request(request) }
     rescue Exception => ex

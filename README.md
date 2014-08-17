@@ -51,6 +51,14 @@ To run an independent instance simply create a new log object
   logger.fatal("Fatal error message")
 ```
 
+### Secure Mode
+
+In many cases it may be prudent to ensure secure log communication with our servers. For these high security situations you can enable SSL communication with the `secure` configuration option.
+
+```ruby
+Oohlalog.secure = true
+```
+
 TODO: Implement Counter support
 
 

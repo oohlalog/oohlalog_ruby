@@ -2,7 +2,7 @@ module Oohlalog
   if defined?(Rails) && Rails::VERSION::MAJOR == 3
     require 'oohlalog/buffered_logger'
     class Railtie < Rails::Railtie
-      initializer "oohlalog" do |app|
+      initializer "oohlalog", :after => :load_config_initializers do |app|
         if Oohlalog.inject_rails && Oohlalog.api_key
             if Oohlalog.agent == 'ruby'
                 Oohlalog.agent = 'rails'
@@ -17,7 +17,7 @@ module Oohlalog
     require 'logger'
     require 'oohlalog/buffered_logger'
     class Railtie < Rails::Railtie
-      initializer "oohlalog" do |app|
+      initializer "oohlalog", :after => :load_config_initializers do |app|
         if Oohlalog.inject_rails && Oohlalog.api_key
             if Oohlalog.agent == 'ruby'
                 Oohlalog.agent = 'rails'

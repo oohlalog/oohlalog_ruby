@@ -28,6 +28,9 @@ class Oohlalog::Logger
         @agent = options["agent"]
     end
 
+    @tags =Oohlalog.tags
+    @session_tag = Oohlalog.session_tag
+
     @secure = Oohlalog.secure
     @buffer_size = buffer_size
     @buffer = []
@@ -36,10 +39,16 @@ class Oohlalog::Logger
 
   def add(severity, message, category=nil, details=nil)
         log_message = message
+
         if message.nil? || message.to_s.empty?
             log_message = category
             category = nil
         end
+        if category == message
+            category = nil
+        end
+
+        session = Thread.current[:session_id]
 
         return if log_message.nil? || log_message.to_s.empty?
 
@@ -47,7 +56,7 @@ class Oohlalog::Logger
             if details.nil? && defined?(log_message.backtrace)
                 details = log_message.backtrace.join("\n")
             end
-            @buffer << {level: severity_string(severity), message: log_message.to_s.gsub(/\e\[(\d+)m/, ''), agent: @agent , category: category, details: details, timestamp:Time.now.to_i * 1000, hostName: Socket.gethostname}
+            @buffer << {level: severity_string(severity), message: log_message.to_s.gsub(/\e\[(\d+)m/, ''), agent: @agent , category: category, details: details, timestamp:Time.now.to_i * 1000, hostName: Socket.gethostname, token: session}
             check_buffer_size
             return
         end
@@ -102,7 +111,7 @@ private
       http_net.read_timeout = 5
       http_net.start {|http| http.request(request) }
     rescue Exception => ex
-      # puts "Oohlalog Exception**: #{ex}"
+    #   puts "Oohlalog Exception**: #{ex}"
     end
   end
 

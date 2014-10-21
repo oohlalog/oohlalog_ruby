@@ -56,7 +56,7 @@ class Oohlalog::Logger
             if details.nil? && defined?(log_message.backtrace)
                 details = log_message.backtrace.join("\n")
             end
-            @buffer << {level: severity_string(severity), message: log_message.to_s.gsub(/\e\[(\d+)m/, ''), agent: @agent , category: category, details: details, timestamp:Time.now.to_i * 1000, hostName: Socket.gethostname, token: session}
+            @buffer << {level: severity_string(severity), message: log_message.to_s.gsub(/\e\[(\d+)m/, ''), agent: @agent , category: category, details: details, timestamp:(Time.now.to_f * 1000).to_i, hostName: Socket.gethostname, token: session}
             check_buffer_size
             return
         end
